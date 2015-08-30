@@ -1,11 +1,11 @@
 'use strict'
 
 var todoArray = []
-var todoKey = 'todos'
+var todoKey = '#todos'
 var taskKey = '#tasks'
 var formKey = '#task-form'
-var addTodo = function ()
-var delete_checked_from_array = function () 
+
+var delete_checked_from_array = function () {
   var tempArray = []
   todoArray.forEach(function (task) {
     if (task['checked'] === false) {
@@ -68,16 +68,14 @@ var clearCheckedTodos = function () {
 
 /**
  * add the input field as task in our todoArray
- *
- * XXX: this doesn't work on first load properly :|
- * and i have no idea how to make it reset
- **/
-/*var addTodo = function () {
-  $('#task-form').on('submit', function (event) {
-    event.preventDefault()
-    addTodo()
-  })
-}*/
+*/
+function addTodo () {
+  var todo_item = $(todoKey).val()
+  if (todo_item === '') {
+    return
+  }
+  push_task_in_todo_list(todo_item)
+}
 
 $('#task-form').on('submit', function (event) {
   event.preventDefault()
@@ -90,6 +88,5 @@ $(document).ready(function () {
   } else {
     todoArray = []
   }
-
   displayTodoList(todoArray, taskKey)
 })

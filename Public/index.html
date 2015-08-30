@@ -14,7 +14,7 @@
 
   <center><div id="logo-container"><img src="Rocket.png"></div>
 
-    <form id="task-form" method="post">
+    <form id="task-form" action="#" method="post">
       <div role="main" class="content">
         <ul id="todolist"></ul>
 
@@ -30,14 +30,16 @@
     </h2>
     <a href="#" onclick="clearCheckedTodos()"><h3>Clear</h3></a>
   </center>
-  <script src="/store.js"></script>
-  <script>
 
-  var store = new Store('my-shareable-dbname')
-  store.add({note: 'hello world!'})
-  // see full API at https://github.com/hoodiehq/pouchdb-hoodie-store
-  </script>
+  <script src="store.js"></script>
+    <script>
+    var store = new Store('nameOfRemoteDB')
+    store.add("#todos")
+    // see full API at https://github.com/hoodiehq/pouchdb-hoodie-store
+    </script>
+
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="code.js"></script>
+  <script src="code.js"></script>
+
   </body
   </html>
