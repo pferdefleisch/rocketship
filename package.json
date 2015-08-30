@@ -7,9 +7,9 @@
     "hapi": "^9.0.3",
     "hapi-couchdb-store": "^1.0.6",
     "pouchdb": "^4.0.0",
-    "pouchdb-hoodie-store": "^1.0.1",
-    "start": "my-server.js"
+    "pouchdb-hoodie-store": "^1.0.1"
   },
+  "start": "my-server.js",
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
