@@ -2,19 +2,21 @@
   "name": "rocketship",
   "version": "1.0.0",
   "description": "",
-  "main": "code.js",
+  "main": "my-server.js",
   "dependencies": {
     "hapi": "^9.0.3",
     "hapi-couchdb-store": "^1.0.6",
+    "inert": "^3.0.1",
     "node": "0.0.0",
+    "path": "^0.11.14",
     "pouchdb": "^4.0.0",
     "pouchdb-hoodie-store": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "my-server.js"
-  },
+    "start": "node my-server.js",
+    "test": "standard && node my-tests.js"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ShellyCoen/rocketship.git"
