@@ -22,8 +22,8 @@
       <div role="main" class="content">
         <ul id="todolist"></ul>
 
-        <label for="todoinput"><h1>Let's get you organised!</h1></label>
-        <input type="text" id="todoinput"  placeholder="What do you need to do?"/>
+        <label for="todos"><h1>Let's get you organised!</h1></label>
+        <input type="text" id="todos"  placeholder="What do you need to do?"/>
         <button type="submit">Add</button>
       </div></center>
     </form>
@@ -34,7 +34,12 @@
     </h2>
     <a href="#" onclick="clearCheckedTodos()"><h3>Clear</h3></a>
     </center>
-
+    <script src="/store.js"></script>
+      <script>
+        var store = new Store('my-shareable-dbname')
+        store.add({note: 'hello world!'})
+        // see full API at https://github.com/hoodiehq/pouchdb-hoodie-store
+      </script>
 
     </body
     </html>
