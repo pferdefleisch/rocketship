@@ -15,11 +15,10 @@ var delete_checked_from_array = function () {
   todoArray = tempArray
 }
 
-
 /**
  * a small helper function that turns a text into our task item
  * */
-var text_to_task = function(text) {
+var text_to_task = function (text) {
   return { text: text, checked: false }
 }
 
@@ -37,19 +36,16 @@ var check_our_storage = function (key) {
   return true
 }
 var load_our_storage = function (key) {
-  return [
-    { text: 'Make Tea', checked: true},
-    { text: 'Take Over The World', checked: false}
-  ]
+  return []
 }
 
 /**
  * display a single todo item
  * */
-var display_todo_item = function(item, id) {
+var display_todo_item = function (item, id) {
   $(id).append('<li> <input type="checkbox"' +
-      ' onclick="todoChecked(this)"' + (item['checked'] ? ' checked ' : '') + '">' +
-      item['text'] + '</input></li>')
+    ' onclick="todoChecked(this)"' + (item['checked'] ? ' checked ' : '') + '">' +
+    item['text'] + '</input></li>')
 }
 /****
  * ** starting here, all the functions are referenced
@@ -57,7 +53,7 @@ var display_todo_item = function(item, id) {
  **/
 
 /**
- * display ALL todo times!
+ * display ALL todo items!
  * */
 var displayTodoList = function (todos, id) {
   todos.forEach(function (task) {
@@ -65,11 +61,10 @@ var displayTodoList = function (todos, id) {
   })
 }
 
-var clearCheckedTodos = function() {
+var clearCheckedTodos = function () {
   delete_checked_from_array()
   $('input:checked').parent().remove()
 }
-
 
 /**
  * add the input field as task in our todoArray
@@ -77,13 +72,13 @@ var clearCheckedTodos = function() {
  * XXX: this doesn't work on first load properly :|
  * and i have no idea how to make it reset
  **/
-var addTodo = function() {
-  $(formKey).submit(function(e) {
-    var inputed_task = $( "input:first" ).val()
-    console.log(inputed_task )
+var addTodo = function () {
+  $(formKey).submit(function (e) {
+    var inputed_task = $('input:first').val()
     push_task_in_todo_list(inputed_task)
     display_todo_item(text_to_task(inputed_task), taskKey)
-    e.preventDefault();
+    e.preventDefault()
+
   })
 }
 
@@ -96,4 +91,3 @@ $(document).ready(function () {
 
   displayTodoList(todoArray, taskKey)
 })
-
