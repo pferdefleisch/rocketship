@@ -4,8 +4,8 @@ var todoArray = []
 var todoKey = 'todos'
 var taskKey = '#tasks'
 var formKey = '#task-form'
-
-var delete_checked_from_array = function () {
+var addTodo = function ()
+var delete_checked_from_array = function () 
   var tempArray = []
   todoArray.forEach(function (task) {
     if (task['checked'] === false) {
@@ -72,15 +72,17 @@ var clearCheckedTodos = function () {
  * XXX: this doesn't work on first load properly :|
  * and i have no idea how to make it reset
  **/
-var addTodo = function () {
-  $(formKey).submit(function (e) {
-    var inputed_task = $('input:first').val()
-    push_task_in_todo_list(inputed_task)
-    display_todo_item(text_to_task(inputed_task), taskKey)
-    e.preventDefault()
-
+/*var addTodo = function () {
+  $('#task-form').on('submit', function (event) {
+    event.preventDefault()
+    addTodo()
   })
-}
+}*/
+
+$('#task-form').on('submit', function (event) {
+  event.preventDefault()
+  addTodo()
+})
 
 $(document).ready(function () {
   if (check_our_storage(todoKey)) {

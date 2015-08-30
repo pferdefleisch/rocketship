@@ -4,19 +4,25 @@
   "description": "",
   "main": "my-server.js",
   "dependencies": {
-    "hapi": "^9.0.3",
-    "hapi-couchdb-store": "^1.0.6",
-    "inert": "^3.0.1",
-    "node": "0.0.0",
-    "path": "^0.11.14",
-    "pouchdb": "^4.0.0",
-    "pouchdb-hoodie-store": "^1.0.1"
+    "good": "^6.3.0",
+  "good-console": "^5.0.3",
+  "h2o2": "^4.0.1",
+  "hapi": "^9.0.3",
+  "hapi-cors-headers": "^1.0.0",
+  "hapi-couchdb-store": "^1.0.6",
+  "index": "^0.4.0",
+  "inert": "^3.0.1",
+  "pouchdb": "^4.0.0",
+  "pouchdb-hoodie-store": "^1.0.1",
+  "promise": "^7.0.4",
+  "standard": "^5.1.0",
+  "standard-format": "^1.6.6"
   },
   "devDependencies": {},
   "scripts": {
     "start": "node my-server.js",
     "test": "standard && node my-tests.js"
-    },
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ShellyCoen/rocketship.git"
