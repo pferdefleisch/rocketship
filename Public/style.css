@@ -1,0 +1,45 @@
+.checked {
+    text-decoration: line-through;
+}
+
+#logo-container img {
+   width: 12%;
+   height: auto;
+   align-items: center;
+   padding: 60px;
+}
+
+#body {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 100%;
+    background: #faebd7;
+    color: CF5300;
+    width: 600px;
+    height: 300px;
+    align-items: center;
+
+    }
+
+content {
+  background-color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 100%;
+  color: CF5300;
+  }
+
+h3 {
+  color: #CF5300
+  }
+
+h1 {
+  color: #CF5300
+}
+
+h2 {
+  color: #00004c
+
+}
+
+div {
+  align-items: center;
+}
