@@ -4,6 +4,19 @@ var todoArray = []
 var todoKey = '#todos'
 var taskKey = '#tasks'
 var formKey = '#task-form'
+var renderTodoList = todoArray
+
+// Add Item to List
+
+store.add('todoKey')
+
+// Load Todos Initially
+
+store.findAll('todoKey')
+
+// Event Listener
+
+store.on('change', renderTodoList)
 
 var delete_checked_from_array = function () {
   var tempArray = []
