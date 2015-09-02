@@ -98,7 +98,10 @@ TodosController.prototype.renderTodos = function () {
   var self = this;
   this.todoStore.all().then(function(todos) {
     var renderedHTML = "";
-    todos.forEach(function(todo) { renderedHTML += todo.toHTML(); });
+    todos.forEach(function(todo) {
+      var presenter = new TodoPresenter(todo);
+      renderedHTML += presenter.toHTML();
+    });
     d("rendering todos");
     self.$todoContainer.html(renderedHTML);
   });
@@ -144,7 +147,6 @@ TodoStore.prototype.all = function() {
     return b.createdAt < a.createdAt ? -1 : 1;
   }
   var promise = store.findAll().then(function(storedTodos){
-    d("storedTodos", storedTodos);
     var todos = [];
     storedTodos.forEach(function(todo) {
       todos.push(new Todo(todo));
@@ -194,13 +196,23 @@ Todo.prototype.toJSON = function () {
   return { task: this.task, checked: this.checked }
 }
 
+
+
+
+/**
+ * TodoPresenter handles presentation logic for the Todo
+*/
+function TodoPresenter(todo) {
+  this.todo = todo;
+}
+
 /**
  * toHTML returns an HTML representation of the Todo
 */
-Todo.prototype.toHTML = function () {
-  var str = '<li><label><input class="js-todo" type="checkbox" ' + (this.checked ? 'checked' : '');
-  str    += ' data-id="' + this.id + '" />';
-  str    += this.task + '</label></li>'
+TodoPresenter.prototype.toHTML = function () {
+  var str = '<li><label><input class="js-todo" type="checkbox" ' + (this.todo.checked ? 'checked' : '');
+  str    += ' data-id="' + this.todo.id + '" />';
+  str    += this.todo.task + '</label></li>'
   return str;
 }
 
@@ -213,11 +225,11 @@ Todo.prototype.toHTML = function () {
 /**
  * d is a wrapper around console.debug
 */
-function d(str) {
-  console.debug(str);
-  Array.prototype.slice.call(arguments, 1,arguments.length).forEach(function(obj) {
-    console.debug(str, obj);
-  });
+function d(str, obj) {
+  if (obj) {
+    return console.debug(str, obj);
+  }
+  return console.debug(str);
 }
 
 /**
