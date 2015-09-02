@@ -13,45 +13,6 @@ function d(str, obj) {
 
 
 /**
- * TodoStore wraps the pouch store and deals with our persistence layer
-*/
-function TodoStore (store) {
-  this.store = store;
-  this.todos = [];
-  this.handlers = [];
-  var self = this;
-  store.on('change', function () {
-    self.handlers.forEach(function(handler) { handler() });
-  })
-}
-
-TodoStore.prototype.add = function(todo) {
-  return this.store.add(todo.toJSON());
-}
-
-TodoStore.prototype.remove = function(id) {
-  return store.remove(id);
-}
-
-TodoStore.prototype.all = function() {
-  var promise = store.findAll().then(function(storedTodos){
-    d("storedTodos", storedTodos);
-    var todos = [];
-    storedTodos.forEach(function(todo) {
-      todos.push(new Todo(todo));
-    })
-    return todos;
-  });
-  return promise;
-}
-
-TodoStore.prototype.onChange = function(func) {
-  this.handlers.push(func);
-}
-
-
-
-/**
  * TodosController deals with delegating user interactions to data and "views"
 */
 function TodosController (store) {
@@ -106,6 +67,45 @@ TodosController.prototype.renderTodos = function (context) {
       context.$todoContainer.html(renderedHTML);
     });
   };
+}
+
+
+
+/**
+ * TodoStore wraps the pouch store and deals with our persistence layer
+*/
+function TodoStore (store) {
+  this.store = store;
+  this.todos = [];
+  this.handlers = [];
+  var self = this;
+  store.on('change', function () {
+    self.handlers.forEach(function(handler) { handler() });
+  })
+}
+
+TodoStore.prototype.add = function(todo) {
+  return this.store.add(todo.toJSON());
+}
+
+TodoStore.prototype.remove = function(id) {
+  return store.remove(id);
+}
+
+TodoStore.prototype.all = function() {
+  var promise = store.findAll().then(function(storedTodos){
+    d("storedTodos", storedTodos);
+    var todos = [];
+    storedTodos.forEach(function(todo) {
+      todos.push(new Todo(todo));
+    })
+    return todos;
+  });
+  return promise;
+}
+
+TodoStore.prototype.onChange = function(func) {
+  this.handlers.push(func);
 }
 
 
