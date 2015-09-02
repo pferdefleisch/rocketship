@@ -8,15 +8,15 @@ var renderTodoList = todoArray
 
 // Add Item to List
 
-store.add('todoKey')
+// store.add('todoKey')
 
 // Load Todos Initially
 
-store.findAll('todoKey')
+// store.findAll('todoKey')
 
 // Event Listener
 
-store.on('change', renderTodoList)
+// store.on('change', renderTodoList)
 
 var delete_checked_from_array = function () {
   var tempArray = []
@@ -35,21 +35,15 @@ var text_to_task = function (text) {
   return { text: text, checked: false }
 }
 
-/**
- * push the task into our global todoArray
- * */
-var push_task_in_todo_list = function (text) {
-  todoArray.push(text_to_task(text))
-}
-
-/**
- * lol
- * */
-var check_our_storage = function (key) {
-  return true
-}
 var load_our_storage = function (key) {
-  return []
+  store.findAll(key).then(
+    function (tasks) {
+      todoArray = tasks
+    },
+    function (error) {
+      console.log('unable to load tasks from storage: ' + error
+      )})
+  return todoArray
 }
 
 /**
@@ -67,10 +61,11 @@ var display_todo_item = function (item, id) {
 
 /**
  * display ALL todo items!
+ * it operates on the global variables todoArray and id
  * */
-var displayTodoList = function (todos, id) {
-  todos.forEach(function (task) {
-    display_todo_item(task, id)
+var displayTodoList = function () {
+  todoArray.forEach(function (task) {
+    display_todo_item(task, taskKey)
   })
 }
 
@@ -81,13 +76,15 @@ var clearCheckedTodos = function () {
 
 /**
  * add the input field as task in our todoArray
+ * as well as into the store
 */
 function addTodo () {
   var todo_item = $(todoKey).val()
   if (todo_item === '') {
     return
   }
-  push_task_in_todo_list(todo_item)
+  todoArray.push(text_to_task(todo_item))
+  store.add(text_to_task(todo_item))
 }
 
 $('#task-form').on('submit', function (event) {
@@ -96,10 +93,8 @@ $('#task-form').on('submit', function (event) {
 })
 
 $(document).ready(function () {
-  if (check_our_storage(todoKey)) {
-    todoArray = load_our_storage(todoKey)
-  } else {
-    todoArray = []
-  }
-  displayTodoList(todoArray, taskKey)
+  todoArray = load_our_storage(todoKey)
+  displayTodoList()
 })
+
+store.on('change', displayTodoList)
