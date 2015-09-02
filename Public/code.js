@@ -1,100 +1,146 @@
 'use strict'
 
-var todoArray = []
-var todoKey = '#todos'
-var taskKey = '#tasks'
-var formKey = '#task-form'
-var renderTodoList = todoArray
-
-// Add Item to List
-
-// store.add('todoKey')
-
-// Load Todos Initially
-
-// store.findAll('todoKey')
-
-// Event Listener
-
-// store.on('change', renderTodoList)
-
-var delete_checked_from_array = function () {
-  var tempArray = []
-  todoArray.forEach(function (task) {
-    if (task['checked'] === false) {
-      tempArray.push(task)
-    }
-  })
-  todoArray = tempArray
-}
-
 /**
- * a small helper function that turns a text into our task item
- * */
-var text_to_task = function (text) {
-  return { text: text, checked: false }
-}
-
-var load_our_storage = function (key) {
-  store.findAll(key).then(
-    function (tasks) {
-      todoArray = tasks
-    },
-    function (error) {
-      console.log('unable to load tasks from storage: ' + error
-      )})
-  return todoArray
-}
-
-/**
- * display a single todo item
- * */
-var display_todo_item = function (item, id) {
-  $(id).append('<li> <input type="checkbox"' +
-    ' onclick="todoChecked(this)"' + (item['checked'] ? ' checked ' : '') + '">' +
-    item['text'] + '</input></li>')
-}
-/****
- * ** starting here, all the functions are referenced
- * ** in index.html, hence, camelCase
- **/
-
-/**
- * display ALL todo items!
- * it operates on the global variables todoArray and id
- * */
-var displayTodoList = function () {
-  todoArray.forEach(function (task) {
-    display_todo_item(task, taskKey)
-  })
-}
-
-var clearCheckedTodos = function () {
-  delete_checked_from_array()
-  $('input:checked').parent().remove()
-}
-
-/**
- * add the input field as task in our todoArray
- * as well as into the store
+ * util functions
 */
-function addTodo () {
-  var todo_item = $(todoKey).val()
-  if (todo_item === '') {
-    return
+function d(str, obj) {
+  if (obj) {
+    return console.debug(str, obj);
   }
-  todoArray.push(text_to_task(todo_item))
-  store.add(text_to_task(todo_item))
+  return console.debug(str);
 }
 
-$('#task-form').on('submit', function (event) {
-  event.preventDefault()
-  addTodo()
-})
 
+
+/**
+ * TodoStore wraps the pouch store and deals with our persistence layer
+*/
+function TodoStore (store) {
+  this.store = store;
+  this.todos = [];
+  this.handlers = [];
+  var self = this;
+  store.on('change', function () {
+    self.handlers.forEach(function(handler) { handler() });
+  })
+}
+
+TodoStore.prototype.add = function(todo) {
+  return this.store.add(todo.toJSON());
+}
+
+TodoStore.prototype.remove = function(id) {
+  return store.remove(id);
+}
+
+TodoStore.prototype.all = function() {
+  var promise = store.findAll().then(function(storedTodos){
+    d("storedTodos", storedTodos);
+    var todos = [];
+    storedTodos.forEach(function(todo) {
+      todos.push(new Todo(todo));
+    })
+    return todos;
+  });
+  return promise;
+}
+
+TodoStore.prototype.onChange = function(func) {
+  this.handlers.push(func);
+}
+
+
+
+/**
+ * TodosController deals with delegating user interactions to data and "views"
+*/
+function TodosController (store) {
+  this.todoStore = store;
+  var todoKey = '.js-todo-task';
+
+  var self = this;
+
+  this.todoStore.onChange(this.renderTodos(this))
+
+  this.$todoContainer = $('.js-todo-container')
+  var $form = $('.js-add-todo');
+  // init list from store
+  $form.on('submit', function (event) {
+    event.preventDefault()
+    var $input = $form.find(todoKey);
+    var todoData = $input.val();
+    var todo = new Todo({task: todoData});
+    d("adding todo", todo);
+    $input.val('');
+    self.todoStore.add(todo);
+  });
+
+  $('.js-clear-todos').on('click', function (event) {
+    event.preventDefault()
+    d("clearing todos");
+    self.clearChecked()
+  });
+
+  this.init = function () {
+    self.renderTodos(self)();
+  }
+}
+
+TodosController.prototype.clearChecked = function () {
+  var self = this
+  this.$todoContainer.find('input:checked').each(function(i, element) {
+    var id = $(element).data('id');
+    d("removing todo with id", id);
+    self.todoStore.remove(id);
+  });
+}
+
+TodosController.prototype.renderTodos = function (context) {
+  return function() {
+    context.todoStore.all().then(function(todos) {
+      var renderedHTML = "";
+      todos.forEach(function(todo) {
+        renderedHTML += todo.toHTML()
+      });
+      d("rendering todos");
+      context.$todoContainer.html(renderedHTML);
+    });
+  };
+}
+
+
+
+/**
+ * Todo is our model and can also present itself, kind of the view too
+ * a presenter would be good here, will add if we get this thing working
+*/
+function Todo (data) {
+  d("create todo data", data);
+  this.id = data.id;
+  this.task = data.task;
+  this.checked = false;
+}
+
+Todo.prototype.toggleDone = function () { this.checked = !this.checked }
+
+Todo.prototype.toJSON = function () {
+  return {task: this.task, checked: this.checked }
+}
+
+Todo.prototype.toHTML = function () {
+  var str = '<li> <input type="checkbox"';
+  str += ' data-id="' + this.id + (this.checked ? ' checked ' : '') + '">';
+  str += this.task + '</input></li>'
+  return str;
+}
+
+
+
+/**
+ * Bootstrap the app
+*/
 $(document).ready(function () {
-  todoArray = load_our_storage(todoKey)
-  displayTodoList()
-})
-
-store.on('change', displayTodoList)
+  var todoStore = new TodoStore(store)
+  var controller = new TodosController(todoStore)
+  controller.init();
+});

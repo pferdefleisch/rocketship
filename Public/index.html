@@ -12,21 +12,21 @@
 
   <center><div id="logo-container"><img src="Rocket.png"></div>
 
-    <form id="task-form" method="post">
+    <form class="js-add-todo">
       <div role="main" class="content">
         <ul id="todolist"></ul>
 
         <label for="todos"><h1>Let's get you organised!</h1></label>
-        <input type="text" id="todos"  placeholder="What do you need to do?"/>
+        <input type="text" class="js-todo-task" placeholder="What do you need to do?"/>
         <button type="submit">Add</button>
       </div></center>
     </form>
   </div>
   <center><div>
     <h2>
-      <ul id="tasks" style="list-style-type:none"></ul>
+      <ul class="js-todo-container" style="list-style-type:none"></ul>
     </h2>
-    <a href="#" onclick="clearCheckedTodos()"><h3>Clear</h3></a>
+    <a href="#" class="js-clear-todos"><h3>Clear</h3></a>
   </center>
 
   <script src="store.js"></script>
