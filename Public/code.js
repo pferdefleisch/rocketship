@@ -3,11 +3,11 @@
 /**
  * util functions
 */
-function d(str, obj) {
-  if (obj) {
-    return console.debug(str, obj);
-  }
-  return console.debug(str);
+function d(str) {
+  console.debug(str);
+  Array.prototype.slice.call(arguments, 1,arguments.length).forEach(function(obj) {
+    console.debug(str, obj)
+  });
 }
 
 
@@ -43,6 +43,10 @@ function TodosController (store) {
     self.clearChecked()
   });
 
+  this.$todoContainer.on('change', '.js-todo', function (event) {
+    self.handleTodoChecked(event.target);
+  });
+
   this.init = function () {
     self.renderTodos();
   }
@@ -55,6 +59,14 @@ TodosController.prototype.clearChecked = function () {
     d("removing todo with id", id);
     self.todoStore.remove(id);
   });
+}
+
+TodosController.prototype.handleTodoChecked = function (checkboxElement) {
+  var $checkbox = $(checkboxElement);
+  var id = $checkbox.data('id');
+  var isChecked = $checkbox.is(':checked');
+  d("checkbox data", isChecked);
+  return this.todoStore.update(id, { checked: isChecked });
 }
 
 TodosController.prototype.renderTodos = function () {
@@ -76,7 +88,6 @@ TodosController.prototype.renderTodos = function () {
 */
 function TodoStore (store) {
   this.store = store;
-  this.todos = [];
   this.handlers = [];
   var self = this;
   store.on('change', function () {
@@ -93,6 +104,7 @@ TodoStore.prototype.remove = function(id) {
 }
 
 TodoStore.prototype.all = function() {
+  var self = this;
   var promise = store.findAll().then(function(storedTodos){
     d("storedTodos", storedTodos);
     var todos = [];
@@ -102,6 +114,11 @@ TodoStore.prototype.all = function() {
     return todos;
   });
   return promise;
+}
+
+TodoStore.prototype.update = function(id, data) {
+  d("updating", id, data);
+  return store.update(id, data);
 }
 
 TodoStore.prototype.onChange = function(func) {
@@ -118,7 +135,7 @@ function Todo (data) {
   d("create todo data", data);
   this.id = data.id;
   this.task = data.task;
-  this.checked = false;
+  this.checked = data.checked;
 }
 
 Todo.prototype.toggleDone = function () { this.checked = !this.checked }
@@ -128,9 +145,9 @@ Todo.prototype.toJSON = function () {
 }
 
 Todo.prototype.toHTML = function () {
-  var str = '<li> <input type="checkbox"';
-  str += ' data-id="' + this.id + (this.checked ? ' checked ' : '') + '">';
-  str += this.task + '</input></li>'
+  var str = '<li><label><input class="js-todo" type="checkbox" ' + (this.checked ? 'checked' : '');
+  str += ' data-id="' + this.id + '" />';
+  str += this.task + '</label></li>'
   return str;
 }
 
