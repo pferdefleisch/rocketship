@@ -21,14 +21,15 @@ function TodosController (store) {
 
   var self = this;
 
-  this.todoStore.onChange(this.renderTodos(this))
+  this.todoStore.onChange(this.renderTodos.bind(this))
 
   this.$todoContainer = $('.js-todo-container')
+
   var $form = $('.js-add-todo');
+  var $input = $form.find(todoKey);
   // init list from store
   $form.on('submit', function (event) {
     event.preventDefault()
-    var $input = $form.find(todoKey);
     var todoData = $input.val();
     var todo = new Todo({task: todoData});
     d("adding todo", todo);
@@ -43,7 +44,7 @@ function TodosController (store) {
   });
 
   this.init = function () {
-    self.renderTodos(self)();
+    self.renderTodos();
   }
 }
 
@@ -56,17 +57,16 @@ TodosController.prototype.clearChecked = function () {
   });
 }
 
-TodosController.prototype.renderTodos = function (context) {
-  return function() {
-    context.todoStore.all().then(function(todos) {
-      var renderedHTML = "";
-      todos.forEach(function(todo) {
-        renderedHTML += todo.toHTML()
-      });
-      d("rendering todos");
-      context.$todoContainer.html(renderedHTML);
+TodosController.prototype.renderTodos = function () {
+  var self = this;
+  this.todoStore.all().then(function(todos) {
+    var renderedHTML = "";
+    todos.forEach(function(todo) {
+      renderedHTML += todo.toHTML()
     });
-  };
+    d("rendering todos");
+    self.$todoContainer.html(renderedHTML);
+  });
 }
 
 
