@@ -105,13 +105,16 @@ TodoStore.prototype.remove = function(id) {
 
 TodoStore.prototype.all = function() {
   var self = this;
+  var sortFunc = function(a, b) {
+    return b.createdAt < a.createdAt ? -1 : 1;
+  }
   var promise = store.findAll().then(function(storedTodos){
     d("storedTodos", storedTodos);
     var todos = [];
     storedTodos.forEach(function(todo) {
       todos.push(new Todo(todo));
     })
-    return todos;
+    return todos.sort(sortFunc);
   });
   return promise;
 }
@@ -136,6 +139,7 @@ function Todo (data) {
   this.id = data.id;
   this.task = data.task;
   this.checked = data.checked;
+  this.createdAt = new Date(data.createdAt);
 }
 
 Todo.prototype.toggleDone = function () { this.checked = !this.checked }
