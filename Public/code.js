@@ -43,6 +43,16 @@ function TodosController (store) {
     self.clearChecked()
   });
 
+  $('.js-check-all').on('click', function(event) {
+    event.preventDefault();
+    self.$todoContainer.find("input").each(function(i, element) {
+      // TODO: this is very inefficient
+      $(element).attr('checked', true).trigger('change');
+    })
+
+
+  });
+
   this.$todoContainer.on('change', '.js-todo', function (event) {
     self.handleTodoChecked(event.target);
   });
@@ -135,11 +145,11 @@ TodoStore.prototype.onChange = function(func) {
  * a presenter would be good here, will add if we get this thing working
 */
 function Todo (data) {
-  d("create todo data", data);
   this.id = data.id;
   this.task = data.task;
   this.checked = data.checked;
   this.createdAt = new Date(data.createdAt);
+  d("create todo data", this);
 }
 
 Todo.prototype.toggleDone = function () { this.checked = !this.checked }

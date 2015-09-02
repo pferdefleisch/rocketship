@@ -10,23 +10,26 @@
 </head>
 <body>
 
-  <center><div id="logo-container"><img src="Rocket.png"></div>
+  <center>
+
+    <div id="logo-container"><img src="Rocket.png" /></div>
 
     <form class="js-add-todo">
       <div role="main" class="content">
-        <ul id="todolist"></ul>
-
         <label for="todos"><h1>Let's get you organised!</h1></label>
         <input type="text" class="js-todo-task" placeholder="What do you need to do?"/>
         <button type="submit">Add</button>
-      </div></center>
+      </div>
+      <p>
+        <button class="js-check-all">Check all</button>
+      </p>
     </form>
-  </div>
-  <center><div>
-    <h2>
+
+    <div>
       <ul class="js-todo-container" style="list-style-type:none"></ul>
-    </h2>
-    <a href="#" class="js-clear-todos"><h3>Clear</h3></a>
+      <a href="#" class="js-clear-todos"><h3>Clear</h3></a>
+    </div>
+
   </center>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
