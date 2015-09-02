@@ -183,10 +183,14 @@ TodoStore.prototype.onChange = function(func) {
  * a presenter would be good here, will add if we get this thing working
 */
 function Todo (data) {
-  this.id        = data.id;
   this.task      = data.task;
-  this.checked   = data.checked;
-  this.createdAt = new Date(data.createdAt);
+  this.checked   = data.checked == true ? true : false
+  if (data.id) {
+    this.id = data.id;
+  }
+  if (data.createdAt) {
+    this.createdAt = new Date(data.createdAt);
+  }
 }
 
 /**
